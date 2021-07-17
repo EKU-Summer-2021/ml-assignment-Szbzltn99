@@ -1,12 +1,14 @@
 """
 decision tree class
 """
+from datetime import datetime
 
 from sklearn import tree
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeRegressor
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,6 +19,7 @@ class DecisionTree:
     """
     model class
     """
+
     def __init__(self):
         self.dataframe = pd.DataFrame(csv_read('C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99'
                                                '/src/csv_files/avocado.csv'))
@@ -36,9 +39,11 @@ class DecisionTree:
         """
         training the model
         """
-        params = {'min_samples_leaf': [5, 6, 7, 8, 9, 10, 11]}
+        params = {'min_samples_leaf': [5, 6, 7, 8, 9, 10, 11], 'random_state': [0, 1, 2, 3],
+                  'min_impurity_decrease': [0.0, 0.1, 0.2, 0.3], 'splitter': ['random', 'best']}
         grid_search_cv = GridSearchCV(DecisionTreeRegressor(random_state=42), params, verbose=3, cv=3)
         grid_search_cv.fit(self.x_train, self.y_train)
+        print(grid_search_cv.score(self.x_test, self.y_test))
         return grid_search_cv.best_estimator_
 
     def put_csv(self):
@@ -57,10 +62,55 @@ class DecisionTree:
         while j < len(y_pred):
             dataframe[1][j] = self.y_test[j]
             j += 1
-        dataframe.to_csv('C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99/src/csv_files/avocado_average.csv')
+        dataframe.to_csv('C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99/'
+                         'avocado_average_project/results/decision_tree_model/'
+                         '2021_07_15_date/avocado_average.csv')
         plt.figure(dpi=70)
         tree.plot_tree(trained_model, max_depth=2)
-        plt.savefig('C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99/src/csv_files/tree.pdf', format='pdf')
+        plt.savefig('C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99/avocado_average_project/'
+                    'results/decision_tree_model/2021_07_15_date/tree.pdf', format='pdf')
+        return y_pred
+
+    def save_results(self):
+        """
+        Method that creates a directory for every single output, and saves it in a csv file with its plot.
+        """
+        directory = 'Results'
+        parent_dir = 'C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99'
+        path = os.path.join(parent_dir, directory)
+        isdir = os.path.isdir(path)
+        if not isdir:
+            os.mkdir(path)
+        directory_lr = 'LR'
+        parent_dir = 'C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99/Results'
+        path = os.path.join(parent_dir, directory_lr)
+        isdir = os.path.isdir(path)
+        if not isdir:
+            os.mkdir(path)
+        file_location = os.path.join(path,
+                                     datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
+        parent_dir = 'C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99/Results'
+        path = os.path.join(parent_dir, directory)
+        isdir = os.path.isdir(file_location)
+        os.mkdir(file_location)
+        self.__save_output_to_csv(file_location)
+        self.__save_output_to_plot(file_location)
+
+    def __save_output_to_csv(self, file_location):
+        """
+            Private method that saves the output into a csv file.
+        """
+        file_name = file_location + "/" + 'result'
+        params = self.search.cv_results_
+        params = pd.DataFrame(params)
+        params.to_csv(file_name)
+
+    def __save_output_to_plot(self, x_test, y_test):
+        """
+            Private method that saves the output plot into the csv file.
+        """
+        plt.plot(x_test, y_test, color='k', label='Decision tree')
+        plt.show()
 
 
 dst = DecisionTree()
