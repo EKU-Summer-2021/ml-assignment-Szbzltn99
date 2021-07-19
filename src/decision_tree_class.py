@@ -62,56 +62,31 @@ class DecisionTree:
         while j < len(y_pred):
             dataframe[1][j] = self.y_test[j]
             j += 1
-        dataframe.to_csv('C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99/'
-                         'avocado_average_project/results/decision_tree_model/'
-                         '2021_07_15_date/avocado_average.csv')
+        path = self.save_results()
+        avocado = '/avocado.csv'
+        dataframe.to_csv(path + avocado)
         plt.figure(dpi=70)
         tree.plot_tree(trained_model, max_depth=2)
-        plt.savefig('C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99/avocado_average_project/'
-                    'results/decision_tree_model/2021_07_15_date/tree.pdf', format='pdf')
+        plt.savefig(path + '/tree.pdf', format='pdf')
         return y_pred
 
-    def save_results(self):
+    @staticmethod
+    def save_results():
         """
         Method that creates a directory for every single output, and saves it in a csv file with its plot.
         """
         directory = 'Results'
-        parent_dir = 'C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99'
+        parent_dir = os.getcwd()
         path = os.path.join(parent_dir, directory)
         isdir = os.path.isdir(path)
         if not isdir:
             os.mkdir(path)
-        directory_lr = 'LR'
-        parent_dir = 'C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99/Results'
-        path = os.path.join(parent_dir, directory_lr)
+        directory_lr = 'DT'
+        path = os.path.join(path, directory_lr)
         isdir = os.path.isdir(path)
         if not isdir:
             os.mkdir(path)
         file_location = os.path.join(path,
                                      datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
-        parent_dir = 'C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99/Results'
-        path = os.path.join(parent_dir, directory)
-        isdir = os.path.isdir(file_location)
         os.mkdir(file_location)
-        self.__save_output_to_csv(file_location)
-        self.__save_output_to_plot(file_location)
-
-    def __save_output_to_csv(self, file_location):
-        """
-            Private method that saves the output into a csv file.
-        """
-        file_name = file_location + "/" + 'result'
-        params = self.search.cv_results_
-        params = pd.DataFrame(params)
-        params.to_csv(file_name)
-
-    def __save_output_to_plot(self, x_test, y_test):
-        """
-            Private method that saves the output plot into the csv file.
-        """
-        plt.plot(x_test, y_test, color='k', label='Decision tree')
-        plt.show()
-
-
-dst = DecisionTree()
-dst.put_csv()
+        return file_location

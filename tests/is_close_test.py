@@ -2,6 +2,7 @@ from src.decision_tree_class import DecisionTree
 import numpy
 import unittest
 
+
 class CsvReadTest(unittest.TestCase):
     def test_csv_read_test(self):
         drt = DecisionTree()
