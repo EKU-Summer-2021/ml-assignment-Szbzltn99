@@ -1,15 +1,15 @@
-import numpy as np
 import os
+from datetime import datetime
+import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from pylab import rcParams
-from datetime import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
-from src.csv_read import csv_read
 from sklearn.model_selection import GridSearchCV
+from src.csv_read import csv_read
 
 
 class KNN:
