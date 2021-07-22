@@ -1,18 +1,21 @@
+import numpy as np
+import os
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from pylab import rcParams
+from datetime import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
-import pandas as pd
 from src.csv_read import csv_read
-import numpy as np
-import os
-from datetime import datetime
 from sklearn.model_selection import GridSearchCV
-import matplotlib.pyplot as plt
-import seaborn as sns
-from pylab import rcParams
 
 
 class KNN:
+    """
+    KNN class
+    """
     def __init__(self):
         self.dataframe = pd.DataFrame(csv_read('C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99'
                                                '/src/csv_files/winequality-red.csv'))
