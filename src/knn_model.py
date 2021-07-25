@@ -17,8 +17,8 @@ class KNN:
     KNN class
     """
     def __init__(self):
-        self.dataframe = pd.DataFrame(csv_read('C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99'
-                                               '/src/csv_files/winequality-red.csv'))
+        path = '/winequality-red.csv'
+        self.dataframe = pd.DataFrame(csv_read(os.getcwd() + path))
         self.inputs = self.dataframe.drop('quality', axis='columns')
         self.target = self.dataframe['quality']
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.inputs, self.target,
