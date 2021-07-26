@@ -1,8 +1,5 @@
-import numpy as np
-from src import Polynomial
+from src.decision_tree_class import DecisionTree
 
 if __name__ == '__main__':
-    coeffs = np.array([1,0,0])
-    polynom = Polynomial(coeffs)
-    print(polynom.evaluate(3))
-    print(polynom.roots())
+    dst = DecisionTree()
+    dst.put_csv()

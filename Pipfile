@@ -9,6 +9,11 @@ coverage = '*'
 
 [packages]
 numpy = '*'
+pandas = "*"
+twentytab-tree = "*"
+tree = "*"
+scikit-learn = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.8"
