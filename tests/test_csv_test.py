@@ -6,7 +6,7 @@ import os
 
 class CsvReadTest(unittest.TestCase):
     def test_csv_read_test(self):
-        avocado = '/avocado.csv'
+        wine = '/winequality-red.csv'
         expected = True
-        actual = isinstance(csv_read(os.getcwd() + avocado), pandas.DataFrame)
+        actual = isinstance(csv_read(os.getcwd() + wine), pandas.DataFrame)
         self.assertEqual(expected, actual)
