@@ -21,8 +21,8 @@ class DecisionTree:
     """
 
     def __init__(self):
-        self.dataframe = pd.DataFrame(csv_read('C:/Users/nemtu/PycharmProjects/ml-assignment-Szbzltn99'
-                                               '/src/csv_files/avocado.csv'))
+        path = '/avocado.csv'
+        self.dataframe = pd.DataFrame(csv_read(os.getcwd() + path))
         self.inputs = self.dataframe.drop('AveragePrice', axis='columns')
         self.target = self.dataframe['AveragePrice']
         le_date = LabelEncoder()
@@ -68,6 +68,8 @@ class DecisionTree:
         plt.figure(dpi=70)
         tree.plot_tree(trained_model, max_depth=2)
         plt.savefig(path + '/tree.pdf', format='pdf')
+        print(dataframe)
+        print(os.getcwd())
         return y_pred
 
     @staticmethod
