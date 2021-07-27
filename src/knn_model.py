@@ -45,25 +45,21 @@ class KNN:
         self.x_test = sc_x.transform(self.x_test)
         return self.x_train, self.x_test
 
-    def train(self):
+    def train(self, params):
         """
         training the model
         """
         self.x_train, self.x_test = self.scale()
-        params = {'n_neighbors': [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-                  'weights': ['uniform', 'distance'],
-                  'algorithm': ['auto', 'ball_tree', 'kd_tree'], 'p': [1, 2, 3],
-                  'leaf_size': [10, 15, 20, 25, 30, 35, 40, 45, 50]}
         grid_search_cv = GridSearchCV(KNeighborsClassifier(), params, verbose=3, cv=3)
         grid_search_cv.fit(self.x_train, self.y_train)
         print(grid_search_cv.score(self.x_test, self.y_test))
         return grid_search_cv.best_estimator_
 
-    def pred(self):
+    def pred(self, params):
         """
         predicting with the model
         """
-        model = self.train()
+        model = self.train(params)
         y_pred = np.array(model.predict(self.x_test))
         i = 0
         j = 0
