@@ -9,3 +9,4 @@ if __name__ == '__main__':
               'algorithm': ['auto', 'ball_tree', 'kd_tree'], 'p': [1, 2, 3],
               'leaf_size': [10, 15, 20, 25, 30, 35, 40, 45, 50]}
     clf.pred(params)
+

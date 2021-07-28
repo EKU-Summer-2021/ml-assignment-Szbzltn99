@@ -22,7 +22,6 @@ class KNN:
         self.inputs = self.dataframe.drop('quality', axis='columns')
         self.target = self.dataframe['quality']
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(self.inputs, self.target,
-
                                                                                 test_size=0.33, random_state=42)
 
     def plot_correlation(self, path):
