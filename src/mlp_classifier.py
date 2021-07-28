@@ -9,6 +9,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
 
 
+
 class MlPC:
     def __init__(self):
         path = '/winequality-red.csv'
@@ -78,9 +79,9 @@ class MlPC:
 
 
 mlp = MlPC()
-params = {'hidden_layer_sizes': [1600, 3200],
-          'activation': ['identity', 'logistic', 'relu'],
-          'max_iter': [2000], 'learning_rate': ['constant', 'invscaling', 'adaptive'],
+params = {'hidden_layer_sizes': [3200],
+          'activation': ['relu'],
+          'max_iter': [1000], 'learning_rate': ['constant'],
 
           }
 mlp.pred(params)
