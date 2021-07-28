@@ -1,4 +1,3 @@
-from src.decision_tree_class import DecisionTree
 from src.knn_model import KNN
 
 if __name__ == '__main__':
