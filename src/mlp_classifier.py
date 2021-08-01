@@ -1,13 +1,14 @@
 import os
 import pandas as pd
 import numpy as np
+import seaborn as sns
 from datetime import datetime
 from src.csv_read import csv_read
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
-
 
 
 class MlPC:
@@ -28,18 +29,19 @@ class MlPC:
         self.x_test = sc_x.transform(self.x_test)
         return self.x_train, self.x_test
 
-    def train(self, params):
+    def train(self, param):
         self.x_train, self.x_test = self.scale()
-        grid_search_cv = GridSearchCV(MLPClassifier(), params, verbose=3, cv=3)
+        grid_search_cv = GridSearchCV(MLPClassifier(), param, verbose=3, cv=3)
         grid_search_cv.fit(self.x_train, self.y_train)
         print(grid_search_cv.score(self.x_test, self.y_test))
         return grid_search_cv.best_estimator_
 
-    def pred(self, params):
+    def pred(self, param):
         """
         predicting with the model
         """
-        model = self.train(params)
+        model = self.train(param)
+        plt.plot(model.loss_curve_)
         y_pred = np.array(model.predict(self.x_test))
         i = 0
         j = 0
@@ -55,6 +57,15 @@ class MlPC:
         wine = '/wine_quality2.csv'
         dataframe.to_csv(path + wine)
         return y_pred
+
+    def plot(self, param):
+        predicted = self.pred(param)
+        df1 = pd.DataFrame(predicted)
+        df2 = pd.DataFrame(self.x_test)
+        sns.kdeplot(df1[0], cumulative=True, color='orange', label='arr1')
+        sns.kdeplot(df2[0], cumulative=True, color='b', label='arr2')
+        sns.kdeplot(df2[0] - df1[0], cumulative=True, color='r', label='difference')
+        plt.show()
 
     @staticmethod
     def save_results():
@@ -79,9 +90,10 @@ class MlPC:
 
 
 mlp = MlPC()
-params = {'hidden_layer_sizes': [3200],
-          'activation': ['relu'],
-          'max_iter': [1000], 'learning_rate': ['constant'],
-
+params = {'hidden_layer_sizes': [100],
+          'activation': ['relu', 'identity'],
+          'max_iter': [2000], 'learning_rate': ['constant', 'invscaling', 'adaptive'],
+          'alpha': [0.0002, 0.0001],
+          'beta_1': [0.9, 0.99]
           }
-mlp.pred(params)
+mlp.plot(params)
