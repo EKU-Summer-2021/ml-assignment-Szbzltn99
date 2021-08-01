@@ -1,17 +1,21 @@
 import os
+from datetime import datetime
 import pandas as pd
 import numpy as np
 import seaborn as sns
-from datetime import datetime
-from src.csv_read import csv_read
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
-import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
+from src.csv_read import csv_read
+import matplotlib.pyplot as plt
 
 
 class MlPC:
+    """
+    MLPC class
+    """
+
     def __init__(self):
         path = '/winequality-red.csv'
         self.dataframe = pd.DataFrame(csv_read(os.getcwd() + path))
@@ -29,18 +33,21 @@ class MlPC:
         self.x_test = sc_x.transform(self.x_test)
         return self.x_train, self.x_test
 
-    def train(self, param):
+    def train(self, d_param):
+        """
+        training the data
+        """
         self.x_train, self.x_test = self.scale()
-        grid_search_cv = GridSearchCV(MLPClassifier(), param, verbose=3, cv=3)
+        grid_search_cv = GridSearchCV(MLPClassifier(), d_param, verbose=3, cv=3)
         grid_search_cv.fit(self.x_train, self.y_train)
         print(grid_search_cv.score(self.x_test, self.y_test))
         return grid_search_cv.best_estimator_
 
-    def pred(self, param):
+    def pred(self, d_param):
         """
         predicting with the model
         """
-        model = self.train(param)
+        model = self.train(d_param)
         plt.plot(model.loss_curve_)
         y_pred = np.array(model.predict(self.x_test))
         i = 0
@@ -58,8 +65,11 @@ class MlPC:
         dataframe.to_csv(path + wine)
         return y_pred
 
-    def plot(self, param):
-        predicted = self.pred(param)
+    def plot(self, d_param):
+        """
+        plotting the differences
+        """
+        predicted = self.pred(d_param)
         df1 = pd.DataFrame(predicted)
         df2 = pd.DataFrame(self.x_test)
         sns.kdeplot(df1[0], cumulative=True, color='orange', label='arr1')
@@ -90,10 +100,10 @@ class MlPC:
 
 
 mlp = MlPC()
-params = {'hidden_layer_sizes': [100],
-          'activation': ['relu', 'identity'],
-          'max_iter': [2000], 'learning_rate': ['constant', 'invscaling', 'adaptive'],
-          'alpha': [0.0002, 0.0001],
-          'beta_1': [0.9, 0.99]
-          }
-mlp.plot(params)
+param = {'hidden_layer_sizes': [100],
+         'activation': ['relu', 'identity'],
+         'max_iter': [2000], 'learning_rate': ['constant', 'invscaling', 'adaptive'],
+         'alpha': [0.0002, 0.0001],
+         'beta_1': [0.9, 0.99]
+         }
+mlp.plot(param)
